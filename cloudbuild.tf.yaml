@@ -1,0 +1,73 @@
+steps:
+- id: 'tf init'
+  name: 'hashicorp/terraform:1.0.0'
+  entrypoint: 'sh'
+  args: 
+  - '-c'
+  - |
+        ls -alh
+        for dir in infra/project-yassir/iac/*/
+        do 
+          cd ${dir}   
+          ls
+          env=${dir%*/}
+          env=${env#*/}
+          echo ""
+          echo "*************** TERRAFORM INIT ******************"
+          echo "******* At Folder:  ${env}  ********"
+          echo "*************************************************"
+          terraform init || exit 1
+          cd ../../../../
+        done
+# [START tf-plan]
+- id: 'tf plan'
+  name: 'hashicorp/terraform:1.0.0'
+  entrypoint: 'sh'
+  args: 
+  - '-c'
+  - | 
+        for dir in infra/project-yassir/iac/*/
+        do 
+          cd ${dir}   
+          env=${dir%*/}
+          env=${env#*/}  
+          echo ""
+          echo "*************** TERRAFOM PLAN ******************"
+          echo "******* At environment: ${env} ********"
+          echo "*************************************************"
+          terraform plan -var-file="vars/dev.tfvars" || exit 1
+          cd ../../../../
+        done
+# [END tf-plan]
+
+# [START tf-apply]
+- id: 'tf apply'
+  name: 'hashicorp/terraform:1.0.0'
+  entrypoint: 'sh'
+  args: 
+  - '-c'
+  - |   
+        cd infra/project-yassir/iac/
+        ls
+        echo "*****************************APPLYING *****************************************"
+        echo "Applying Bootstrap"
+        echo "*******************************************************************************"
+        cd bootstrap
+        terraform apply -auto-approve -var-file="vars/dev.tfvars"
+        echo "*****************************APPLYING *****************************************"
+        echo "Building Network"
+        echo "*******************************************************************************"
+        cd ../network
+        terraform apply -auto-approve -var-file="vars/dev.tfvars"
+        echo "*****************************APPLYING *****************************************"
+        echo "Building Cluster"
+        echo "*******************************************************************************"
+        cd ../cluster
+        terraform apply -auto-approve -var-file="vars/dev.tfvars"
+        echo "*****************************APPLYING *****************************************"
+        echo "Applying Cloudbuild to deploy Application to the Cluster"
+        echo "*******************************************************************************"
+        cd ../cloudbuild
+        terraform apply -auto-approve -var-file="vars/dev.tfvars"
+        echo "***************************** TERRAFROM APPLY COMPLETE *******************************"
+# [END tf-apply]
