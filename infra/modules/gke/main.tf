@@ -26,6 +26,9 @@ module "gke" {
   subnetwork             = "${var.subnetwork}-${var.env}"
   ip_range_pods          = var.ip_range_pods_name
   ip_range_services      = var.ip_range_services_name
+  logging_service        = "logging.googleapis.com/kubernetes"
+  monitoring_service     = "monitoring.googleapis.com/kubernetes"
+  network_policy         = true
   node_pools = [
     {
       name                      = "node-pool"

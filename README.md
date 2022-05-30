@@ -16,6 +16,14 @@ The setup will create:
 
 Terraform configuration should mostly be driven through the `[environment].tfvars` files. This will allow the same code to have the same consistency in diffrent environment but could have different capacity, sizes , policy, retention etc.
 
+- **GKE Module**
+- This particular GKE module creates a private cluster 
+- Creates a GKE cluster with the provided addons
+- Creates GKE Node Pool(s) with provided configuration and attach to cluster
+- Activates network policy (Calico) if network_policy is true
+- Enables logging and monitoring for the cluster
+
+
 **Warning!** 
 **Here, I will list some warnings and tradeoffs**
 I've not had time and possibility to polish up the manifest(Also why I didn't build docker)and automate secret creation. The mysql-secret is created manually using `kubectl create secret generic mysql-pass  --from-literal=password=<password>`. This could moved to Google Secret manager using CSI Driver.
