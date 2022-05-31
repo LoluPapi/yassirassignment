@@ -4,7 +4,7 @@
 This is an implementation of my [`wordpress with mysql`](https://github.com/loluPapi/yassir-wordpress-mysql) that runs on GCP through automation with Terraform. 
 This Implementation uses the example K8s manifest found here [`Kubernetes Tutorial`](https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/) and skips the **need to write code, build docker, and push to registry.**
 The yaml deployment for kubernetes is in the `root` folder, and Terraform files in `infra`.
-A utility script to run the terraform is in the `root` folder
+A utility script to run the terraform is in the `root` folder.
 
 The setup will create:
 
@@ -16,7 +16,7 @@ The setup will create:
 
 Terraform configuration should mostly be driven through the `[environment].tfvars` files. This will allow the same code to have the same consistency in diffrent environment but could have different capacity, sizes , policy, retention etc.
 
-- **GKE Module**
+ **GKE Module**
 - This particular GKE module creates a private cluster 
 - Creates a GKE cluster with the provided addons
 - Creates GKE Node Pool(s) with provided configuration and attach to cluster
